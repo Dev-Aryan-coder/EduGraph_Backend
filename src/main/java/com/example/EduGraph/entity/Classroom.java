@@ -40,5 +40,6 @@ public class Classroom extends BaseEntity {
     private User coordinator;
 
     @Column(name = "academic_year", nullable = false)
-    private String academicYear;
+    @Builder.Default
+    private String academicYear = "2026-2027";
 }

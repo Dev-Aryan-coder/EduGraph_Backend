@@ -105,6 +105,9 @@ public class StaffOnboardingController {
             @RequestBody Map<String, Object> body) {
         String name = (String) body.get("name");
         String section = (String) body.get("section");
+        String academicYear = (body.get("academicYear") != null && !body.get("academicYear").toString().trim().isEmpty())
+                ? body.get("academicYear").toString().trim()
+                : "2026-2027";
         Long teacherId = body.get("teacherId") != null && !body.get("teacherId").toString().isEmpty()
                 ? Long.valueOf(body.get("teacherId").toString())
                 : null;
@@ -117,6 +120,7 @@ public class StaffOnboardingController {
         Classroom classroom = Classroom.builder()
                 .name(name)
                 .section(section)
+                .academicYear(academicYear)
                 .college(college)
                 .coordinator(coordinator)
                 .teacher(teacher)
