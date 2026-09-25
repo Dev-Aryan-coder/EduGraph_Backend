@@ -16,11 +16,11 @@ import lombok.Setter;
 @Builder
 public class VerifyOtpRequest {
 
-    @NotBlank(message = Email is required)
-    @Email(message = Invalid email format)
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = OTP code is required)
-    @Size(min = 6, max = 6, message = OTP must be exactly 6 digits)
+    @NotBlank(message = "OTP code is required")
+    @Size(min = 6, max = 6, message = "OTP must be exactly 6 digits")
     private String otp;
 }

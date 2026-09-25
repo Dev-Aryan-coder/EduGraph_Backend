@@ -12,7 +12,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = password_reset_otps)
+@Table(name = "password_reset_otps")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,10 +26,10 @@ public class PasswordResetOtp extends BaseEntity {
     @Column(nullable = false, length = 10)
     private String otp;
 
-    @Column(name = expiry_time, nullable = false)
+    @Column(name = "expiry_time", nullable = false)
     private LocalDateTime expiryTime;
 
-    @Column(name = is_used, nullable = false)
+    @Column(name = "is_used", nullable = false)
     @Builder.Default
     private boolean used = false;
 }
