@@ -1,4 +1,4 @@
-package com.example.EduGraph.service.impl;
+﻿package com.example.EduGraph.service.impl;
 
 import com.example.EduGraph.entity.User;
 import com.example.EduGraph.enums.UserRole;
@@ -62,6 +62,40 @@ public class EmailServiceImpl implements EmailService {
         } catch (Exception e) {
             log.warn("Error parsing role {} for credentials email to {}: {}", role, toEmail, e.getMessage());
         }
+    }
+
+    
+    @Async
+    @Override
+    public void sendOtpEmail(String toEmail, String fullName, String otp) {
+        String subject = "Your EduGraph Password Reset Verification Code: " + otp;
+        String htmlContent = """
+            <div style="font-family: Arial, sans-serif; padding: 25px; color: #10233F; max-width: 600px; margin: auto; border: 1px solid #E2E8F0; border-radius: 12px; background-color: #FFFFFF;">
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <h1 style="color: #10233F; font-size: 26px; margin: 0; font-weight: 800;">EduGraph</h1>
+                    <p style="color: #1B7F72; font-size: 14px; margin: 4px 0 0 0; font-weight: 600;">Interactive Visual Knowledge Platform</p>
+                </div>
+                <div style="border-top: 1px solid #E2E8F0; padding-top: 20px;">
+                    <p style="font-size: 16px;">Hello <strong>%s</strong>,</p>
+                    <p style="font-size: 15px; color: #4A5568; line-height: 1.6;">
+                        We received a request to reset your password for your EduGraph account. Use the 6-digit verification code below to complete the reset process:
+                    </p>
+                    <div style="text-align: center; margin: 30px 0;">
+                        <div style="display: inline-block; background-color: #F8FAFC; border: 2px dashed #1B7F72; border-radius: 12px; padding: 18px 36px;">
+                            <span style="font-family: monospace; font-size: 32px; font-weight: 800; letter-spacing: 8px; color: #10233F;">%s</span>
+                        </div>
+                        <p style="font-size: 13px; color: #C6822E; font-weight: 600; margin-top: 10px;">Valid for 10 minutes only</p>
+                    </div>
+                    <p style="font-size: 14px; color: #64748B; line-height: 1.5;">
+                        If you did not request a password reset, please ignore this email or contact your institution's EduGraph coordinator.
+                    </p>
+                </div>
+                <div style="border-top: 1px solid #E2E8F0; margin-top: 30px; padding-top: 16px; text-align: center; font-size: 12px; color: #94A3B8;">
+                    &copy; 2026 EduGraph Technologies Inc. All rights reserved.
+                </div>
+            </div>
+            """.formatted(fullName, otp);
+        sendHtmlEmail(toEmail, subject, htmlContent);
     }
 
     @Async
