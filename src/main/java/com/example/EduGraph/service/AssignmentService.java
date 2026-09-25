@@ -14,5 +14,6 @@ public interface AssignmentService {
     List<AssignmentResponse> getAssignmentsForStudent(Long studentId);
     AssignmentResponse extendDeadline(Long assignmentId, ExtendDeadlineRequest request, Long teacherId);
     AssignmentStatsResponse getAssignmentStats(Long assignmentId, Long teacherId);
+    List<AssignmentResponse> getAssignmentsByTeacher(Long teacherId);
     void deleteAssignment(Long assignmentId, Long teacherId);
 }

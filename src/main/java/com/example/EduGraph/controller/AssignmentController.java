@@ -38,6 +38,13 @@ public class AssignmentController {
                 .body(ApiResponse.success(response, "Assignment created with 20 MCQ verification questions successfully"));
     }
 
+    @GetMapping("/my-authored")
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER', 'ROLE_ADMIN', 'ROLE_PRINCIPAL')")
+    public ResponseEntity<ApiResponse<List<AssignmentResponse>>> getMyAuthoredAssignments(
+            @AuthenticationPrincipal SecurityUserPrincipal principal) {
+        return ResponseEntity.ok(ApiResponse.success(assignmentService.getAssignmentsByTeacher(principal.getId())));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AssignmentResponse>> getAssignmentById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(assignmentService.getAssignmentById(id)));

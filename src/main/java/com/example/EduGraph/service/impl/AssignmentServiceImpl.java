@@ -129,6 +129,14 @@ public class AssignmentServiceImpl implements AssignmentService {
                 .toList();
     }
 
+        @Override
+    public List<AssignmentResponse> getAssignmentsByTeacher(Long teacherId) {
+        List<Assignment> list = assignmentRepository.findByTeacherId(teacherId);
+        return list.stream()
+                .map(a -> entityMapper.toAssignmentResponse(a, (int) mcqQuestionRepository.countByAssignmentId(a.getId())))
+                .toList();
+    }
+
     @Override
     public List<AssignmentResponse> getAssignmentsForStudent(Long studentId) {
         User student = userRepository.findById(studentId)
