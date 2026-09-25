@@ -1,4 +1,4 @@
-package com.example.EduGraph.mapper;
+﻿package com.example.EduGraph.mapper;
 
 import com.example.EduGraph.dto.response.*;
 import com.example.EduGraph.entity.*;
@@ -56,6 +56,7 @@ public class EntityMapper {
                 .classroomName(user.getClassroom() != null ? user.getClassroom().getName() : null)
                 .rollNumber(user.getRollNumber())
                 .phoneNumber(user.getPhoneNumber())
+                .profileImageUrl(user.getProfileImageUrl())
                 .build();
     }
 

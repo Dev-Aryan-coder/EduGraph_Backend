@@ -1,4 +1,4 @@
-package com.example.EduGraph.dto.request;
+﻿package com.example.EduGraph.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -16,4 +16,6 @@ public class ProfileUpdateRequest {
     private String fullName;
 
     private String phoneNumber;
+
+    private String profileImageUrl;
 }

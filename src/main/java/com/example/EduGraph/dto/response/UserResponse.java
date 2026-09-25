@@ -1,4 +1,4 @@
-package com.example.EduGraph.dto.response;
+﻿package com.example.EduGraph.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,4 +24,5 @@ public class UserResponse {
     private String classroomName;
     private String rollNumber;
     private String phoneNumber;
+    private String profileImageUrl;
 }

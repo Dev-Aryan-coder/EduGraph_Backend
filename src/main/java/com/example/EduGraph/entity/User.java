@@ -1,4 +1,4 @@
-package com.example.EduGraph.entity;
+﻿package com.example.EduGraph.entity;
 
 import com.example.EduGraph.enums.AccountStatus;
 import com.example.EduGraph.enums.UserRole;
@@ -56,4 +56,7 @@ public class User extends BaseEntity {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "profile_image_url", length = 1000)
+    private String profileImageUrl;
 }

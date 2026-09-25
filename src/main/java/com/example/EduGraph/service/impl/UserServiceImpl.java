@@ -1,4 +1,4 @@
-package com.example.EduGraph.service.impl;
+﻿package com.example.EduGraph.service.impl;
 
 import com.example.EduGraph.dto.request.PasswordChangeRequest;
 import com.example.EduGraph.dto.request.ProfileUpdateRequest;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -27,7 +26,6 @@ public class UserServiceImpl implements UserService {
         this.mapper = mapper;
         this.passwordEncoder = passwordEncoder;
     }
-
 
     @Override
     public UserResponse getCurrentUser(Long userId) {
@@ -42,9 +40,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + userId));
 
-        user.setFullName(request.getFullName());
+        user.setFullName(request.getFullName().trim());
         if (request.getPhoneNumber() != null) {
-            user.setPhoneNumber(request.getPhoneNumber());
+            user.setPhoneNumber(request.getPhoneNumber().trim());
+        }
+        if (request.getProfileImageUrl() != null) {
+            user.setProfileImageUrl(request.getProfileImageUrl().trim());
         }
 
         User saved = userRepository.save(user);
@@ -61,7 +62,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Current password does not match.");
         }
 
-        user.setPassword(request.getNewPassword());
+        user.setPassword(passwordEncoder.encode(request.getNewPassword().trim()));
         userRepository.save(user);
     }
 }

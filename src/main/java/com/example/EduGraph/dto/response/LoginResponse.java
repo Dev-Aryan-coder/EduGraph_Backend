@@ -1,4 +1,4 @@
-package com.example.EduGraph.dto.response;
+﻿package com.example.EduGraph.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,4 +24,5 @@ public class LoginResponse {
     private String collegeName;
     private Long classroomId;
     private String classroomName;
+    private String profileImageUrl;
 }
