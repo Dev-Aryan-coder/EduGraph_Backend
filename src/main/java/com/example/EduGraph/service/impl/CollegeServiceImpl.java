@@ -1,4 +1,4 @@
-package com.example.EduGraph.service.impl;
+﻿package com.example.EduGraph.service.impl;
 
 import com.example.EduGraph.dto.request.CoordinatorCreateRequest;
 import com.example.EduGraph.dto.request.PrincipalRegisterRequest;
@@ -115,6 +115,20 @@ public class CollegeServiceImpl implements CollegeService {
     public List<UserResponse> getCoordinators(Long collegeId) {
         return userRepository.findByCollegeIdAndRole(collegeId, UserRole.COORDINATOR).stream()
                 .map(mapper::toUserResponse)
+                .collect(Collectors.toList());
+    }
+
+        @Override
+    public List<UserResponse> getTeachers(Long collegeId) {
+        return userRepository.findByCollegeIdAndRole(collegeId, UserRole.TEACHER).stream()
+                .map(mapper::toUserResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ClassroomResponse> getClassrooms(Long collegeId) {
+        return classroomRepository.findByCollegeId(collegeId).stream()
+                .map(c -> mapper.toClassroomResponse(c, 0))
                 .collect(Collectors.toList());
     }
 

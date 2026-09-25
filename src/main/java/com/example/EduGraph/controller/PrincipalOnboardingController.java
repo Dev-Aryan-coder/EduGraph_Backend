@@ -1,4 +1,4 @@
-package com.example.EduGraph.controller;
+﻿package com.example.EduGraph.controller;
 
 import com.example.EduGraph.dto.request.CoordinatorCreateRequest;
 import com.example.EduGraph.dto.request.PrincipalRegisterRequest;
@@ -57,6 +57,22 @@ public class PrincipalOnboardingController {
     public ResponseEntity<ApiResponse<List<UserResponse>>> getCoordinators(
             @AuthenticationPrincipal SecurityUserPrincipal principal) {
         List<UserResponse> list = collegeService.getCoordinators(principal.getCollegeId());
+        return ResponseEntity.ok(ApiResponse.success(list));
+    }
+
+    @GetMapping("/teachers")
+    @PreAuthorize("hasRole('PRINCIPAL')")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getTeachers(
+            @AuthenticationPrincipal SecurityUserPrincipal principal) {
+        List<UserResponse> list = collegeService.getTeachers(principal.getCollegeId());
+        return ResponseEntity.ok(ApiResponse.success(list));
+    }
+
+    @GetMapping("/classrooms")
+    @PreAuthorize("hasRole('PRINCIPAL')")
+    public ResponseEntity<ApiResponse<List<ClassroomResponse>>> getClassrooms(
+            @AuthenticationPrincipal SecurityUserPrincipal principal) {
+        List<ClassroomResponse> list = collegeService.getClassrooms(principal.getCollegeId());
         return ResponseEntity.ok(ApiResponse.success(list));
     }
 

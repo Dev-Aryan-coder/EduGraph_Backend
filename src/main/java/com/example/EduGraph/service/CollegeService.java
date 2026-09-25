@@ -1,4 +1,4 @@
-package com.example.EduGraph.service;
+﻿package com.example.EduGraph.service;
 
 import com.example.EduGraph.dto.request.CoordinatorCreateRequest;
 import com.example.EduGraph.dto.request.PrincipalRegisterRequest;
@@ -17,4 +17,8 @@ public interface CollegeService {
     List<UserResponse> getCoordinators(Long collegeId);
 
     CollegeOverviewResponse getCollegeOverview(Long collegeId);
+
+    java.util.List<com.example.EduGraph.dto.response.UserResponse> getTeachers(Long collegeId);
+
+    java.util.List<com.example.EduGraph.dto.response.ClassroomResponse> getClassrooms(Long collegeId);
 }
