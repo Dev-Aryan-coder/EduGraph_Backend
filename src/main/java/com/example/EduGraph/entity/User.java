@@ -1,4 +1,4 @@
-﻿package com.example.EduGraph.entity;
+package com.example.EduGraph.entity;
 
 import com.example.EduGraph.enums.AccountStatus;
 import com.example.EduGraph.enums.UserRole;

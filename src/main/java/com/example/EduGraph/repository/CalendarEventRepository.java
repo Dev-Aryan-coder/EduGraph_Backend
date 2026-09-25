@@ -1,4 +1,4 @@
-﻿package com.example.EduGraph.repository;
+package com.example.EduGraph.repository;
 
 import com.example.EduGraph.entity.CalendarEvent;
 import org.springframework.data.jpa.repository.JpaRepository;

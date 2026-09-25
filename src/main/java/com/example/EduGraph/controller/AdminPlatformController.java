@@ -1,4 +1,4 @@
-﻿package com.example.EduGraph.controller;
+package com.example.EduGraph.controller;
 
 import com.example.EduGraph.dto.response.*;
 import com.example.EduGraph.entity.User;

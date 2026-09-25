@@ -18,11 +18,13 @@ public class SecurityUserPrincipal implements UserDetails {
 
     private final Long id;
     private final String email;
+    private final String fullName;
     private final String password;
     private final String role;
     private final Long collegeId;
     private final Long classroomId;
     private final Collection<? extends GrantedAuthority> authorities;
+
     public Long getId() {
         return id;
     }
@@ -33,6 +35,10 @@ public class SecurityUserPrincipal implements UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getFullName() {
+        return fullName != null ? fullName : email;
     }
 
     public Long getCollegeId() {
@@ -56,6 +62,7 @@ public class SecurityUserPrincipal implements UserDetails {
         return SecurityUserPrincipal.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                .fullName(user.getFullName())
                 .password(user.getPassword())
                 .role(user.getRole().name())
                 .collegeId(user.getCollege() != null ? user.getCollege().getId() : null)

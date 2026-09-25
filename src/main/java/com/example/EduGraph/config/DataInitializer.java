@@ -1,4 +1,4 @@
-﻿package com.example.EduGraph.config;
+package com.example.EduGraph.config;
 
 import com.example.EduGraph.entity.User;
 import com.example.EduGraph.enums.AccountStatus;

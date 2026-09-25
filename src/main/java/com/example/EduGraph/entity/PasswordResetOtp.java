@@ -1,4 +1,4 @@
-﻿package com.example.EduGraph.entity;
+package com.example.EduGraph.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

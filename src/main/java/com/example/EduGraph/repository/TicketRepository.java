@@ -1,4 +1,4 @@
-﻿package com.example.EduGraph.repository;
+package com.example.EduGraph.repository;
 
 import com.example.EduGraph.entity.Ticket;
 import com.example.EduGraph.enums.TicketStatus;
