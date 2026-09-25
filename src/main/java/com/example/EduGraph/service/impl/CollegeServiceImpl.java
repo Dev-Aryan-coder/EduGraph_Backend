@@ -1,7 +1,8 @@
-﻿package com.example.EduGraph.service.impl;
+package com.example.EduGraph.service.impl;
 
 import com.example.EduGraph.dto.request.CoordinatorCreateRequest;
 import com.example.EduGraph.dto.request.PrincipalRegisterRequest;
+import com.example.EduGraph.dto.response.ClassroomResponse;
 import com.example.EduGraph.dto.response.CollegeOverviewResponse;
 import com.example.EduGraph.dto.response.LoginResponse;
 import com.example.EduGraph.dto.response.UserResponse;
