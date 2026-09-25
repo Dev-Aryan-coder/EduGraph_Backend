@@ -130,6 +130,89 @@ public class StaffOnboardingController {
         return ResponseEntity.ok(ApiResponse.success(mapper.toClassroomResponse(saved, 0), "Classroom created successfully"));
     }
 
+    @PutMapping("/classrooms/{id}")
+    @PreAuthorize("hasRole('COORDINATOR')")
+    public ResponseEntity<ApiResponse<ClassroomResponse>> updateClassroom(
+            @PathVariable Long id,
+            @AuthenticationPrincipal SecurityUserPrincipal principal,
+            @RequestBody Map<String, Object> body) {
+        Classroom classroom = classroomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Classroom not found with ID: " + id));
+
+        if (!classroom.getCollege().getId().equals(principal.getCollegeId())) {
+            throw new BadRequestException("Unauthorized access to this classroom");
+        }
+
+        if (body.containsKey("name") && body.get("name") != null && !body.get("name").toString().trim().isEmpty()) {
+            classroom.setName(body.get("name").toString().trim());
+        }
+        if (body.containsKey("section")) {
+            classroom.setSection(body.get("section") != null ? body.get("section").toString().trim() : null);
+        }
+        if (body.containsKey("academicYear") && body.get("academicYear") != null && !body.get("academicYear").toString().trim().isEmpty()) {
+            classroom.setAcademicYear(body.get("academicYear").toString().trim());
+        }
+        if (body.containsKey("teacherId")) {
+            Object tId = body.get("teacherId");
+            if (tId != null && !tId.toString().trim().isEmpty()) {
+                Long teacherId = Long.valueOf(tId.toString());
+                User teacher = userRepository.findById(teacherId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Teacher not found with ID: " + teacherId));
+                if (!teacher.getCollege().getId().equals(principal.getCollegeId()) || teacher.getRole() != UserRole.TEACHER) {
+                    throw new BadRequestException("Invalid faculty assigned");
+                }
+                classroom.setTeacher(teacher);
+            } else {
+                classroom.setTeacher(null);
+            }
+        }
+
+        Classroom saved = classroomRepository.save(classroom);
+        int studentCount = userRepository.findByClassroomIdAndRole(saved.getId(), UserRole.STUDENT).size();
+        return ResponseEntity.ok(ApiResponse.success(mapper.toClassroomResponse(saved, studentCount), "Classroom updated successfully"));
+    }
+
+    @PutMapping("/students/{id}")
+    @PreAuthorize("hasRole('COORDINATOR')")
+    public ResponseEntity<ApiResponse<UserResponse>> updateStudent(
+            @PathVariable Long id,
+            @AuthenticationPrincipal SecurityUserPrincipal principal,
+            @RequestBody Map<String, Object> body) {
+        User student = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Student not found with ID: " + id));
+
+        if (!student.getCollege().getId().equals(principal.getCollegeId()) || student.getRole() != UserRole.STUDENT) {
+            throw new BadRequestException("Unauthorized access to this student record");
+        }
+
+        if (body.containsKey("fullName") && body.get("fullName") != null && !body.get("fullName").toString().trim().isEmpty()) {
+            student.setFullName(body.get("fullName").toString().trim());
+        }
+        if (body.containsKey("rollNumber")) {
+            student.setRollNumber(body.get("rollNumber") != null ? body.get("rollNumber").toString().trim() : null);
+        }
+        if (body.containsKey("phoneNumber")) {
+            student.setPhoneNumber(body.get("phoneNumber") != null ? body.get("phoneNumber").toString().trim() : null);
+        }
+        if (body.containsKey("classroomId")) {
+            Object cId = body.get("classroomId");
+            if (cId != null && !cId.toString().trim().isEmpty()) {
+                Long classroomId = Long.valueOf(cId.toString());
+                Classroom classroom = classroomRepository.findById(classroomId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Classroom not found with ID: " + classroomId));
+                if (!classroom.getCollege().getId().equals(principal.getCollegeId())) {
+                    throw new BadRequestException("Classroom does not belong to this college");
+                }
+                student.setClassroom(classroom);
+            } else {
+                student.setClassroom(null);
+            }
+        }
+
+        User saved = userRepository.save(student);
+        return ResponseEntity.ok(ApiResponse.success(mapper.toUserResponse(saved), "Student details updated successfully"));
+    }
+
     @DeleteMapping("/classrooms/{id}")
     @PreAuthorize("hasRole('COORDINATOR')")
     public ResponseEntity<ApiResponse<Void>> deleteClassroom(
