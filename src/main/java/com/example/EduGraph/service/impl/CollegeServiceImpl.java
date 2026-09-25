@@ -20,6 +20,8 @@ import com.example.EduGraph.security.JwtUtil;
 import com.example.EduGraph.service.CollegeService;
 import com.example.EduGraph.service.EmailService;
 
+import java.security.SecureRandom;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +38,16 @@ public class CollegeServiceImpl implements CollegeService {
     private final JwtUtil jwtUtil;
     private final EntityMapper mapper;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
-    public CollegeServiceImpl(CollegeRepository collegeRepository, UserRepository userRepository, ClassroomRepository classroomRepository, JwtUtil jwtUtil, EntityMapper mapper, EmailService emailService) {
+    public CollegeServiceImpl(CollegeRepository collegeRepository, UserRepository userRepository, ClassroomRepository classroomRepository, JwtUtil jwtUtil, EntityMapper mapper, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.collegeRepository = collegeRepository;
         this.userRepository = userRepository;
         this.classroomRepository = classroomRepository;
         this.jwtUtil = jwtUtil;
         this.mapper = mapper;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -64,7 +68,7 @@ public class CollegeServiceImpl implements CollegeService {
         User principal = User.builder()
                 .fullName(request.getFullName())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .role(UserRole.PRINCIPAL)
                 .status(AccountStatus.ACTIVE)
                 .college(savedCollege)
@@ -95,10 +99,15 @@ public class CollegeServiceImpl implements CollegeService {
         College college = collegeRepository.findById(principalCollegeId)
                 .orElseThrow(() -> new ResourceNotFoundException("College not found with ID: " + principalCollegeId));
 
+        // Auto-generate secure credentials if password was not provided by principal
+        String rawPassword = (request.getPassword() != null && !request.getPassword().trim().isEmpty())
+                ? request.getPassword().trim()
+                : generateSecurePassword();
+
         User coordinator = User.builder()
-                .fullName(request.getFullName())
-                .email(request.getEmail())
-                .password(request.getPassword())
+                .fullName(request.getFullName().trim())
+                .email(request.getEmail().trim().toLowerCase())
+                .password(passwordEncoder.encode(rawPassword))
                 .role(UserRole.COORDINATOR)
                 .status(AccountStatus.ACTIVE)
                 .college(college)
@@ -107,7 +116,7 @@ public class CollegeServiceImpl implements CollegeService {
 
         User saved = userRepository.save(coordinator);
 
-        emailService.sendCredentialsEmail(saved.getEmail(), saved.getFullName(), request.getPassword(), UserRole.COORDINATOR.name());
+        emailService.sendCredentialsEmail(saved.getEmail(), saved.getFullName(), rawPassword, UserRole.COORDINATOR.name());
 
         return mapper.toUserResponse(saved);
     }
@@ -151,5 +160,11 @@ public class CollegeServiceImpl implements CollegeService {
                 .totalStudents(students)
                 .totalClassrooms(classrooms)
                 .build();
+    }
+
+    private String generateSecurePassword() {
+        SecureRandom random = new SecureRandom();
+        int digits = 100000 + random.nextInt(900000);
+        return "Coord@" + digits;
     }
 }

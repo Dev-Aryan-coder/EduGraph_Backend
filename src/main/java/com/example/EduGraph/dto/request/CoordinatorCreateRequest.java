@@ -22,7 +22,6 @@ public class CoordinatorCreateRequest {
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Initial password is required")
     private String password;
 
     private String phoneNumber;
